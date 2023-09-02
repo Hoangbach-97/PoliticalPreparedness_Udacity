@@ -17,7 +17,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/margin_12dp"
+        android:layout_margin="@dimen/size_12dp"
         android:gravity="start"
         android:onClick="@{()->clickElectionListener.onClick(electionModel)}">
 
@@ -37,7 +37,7 @@
             android:id="@+id/subTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/margin_4dp"
+            android:layout_margin="@dimen/size_4dp"
             android:text="@{electionModel.electionDay}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@+id/title"

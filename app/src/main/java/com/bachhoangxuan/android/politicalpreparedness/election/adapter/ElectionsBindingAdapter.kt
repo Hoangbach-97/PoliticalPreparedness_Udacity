@@ -14,7 +14,7 @@ import java.util.*
 @BindingAdapter("buttonText")
 fun buttonText(button: Button, status: Boolean) {
     val text =
-        button.context.getString(if (status) R.string.unfollow_election else R.string.follow_election)
+        button.context.getString(if (status) R.string.unfollow else R.string.follow)
     button.text = text
 }
 

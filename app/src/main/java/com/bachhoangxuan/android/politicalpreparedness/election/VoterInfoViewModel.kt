@@ -103,17 +103,17 @@ class VoterInfoViewModel(private val application: Application) : ViewModel() {
                     if (electionData != null) {
                         _electionMutableLiveData.value = electionData
                         _saveButtonNameMutableLiveData.value =
-                            application.getString(R.string.unfollow_election)
+                            application.getString(R.string.unfollow)
                     } else {
                         _saveButtonNameMutableLiveData.value =
-                            application.getString(R.string.follow_election)
+                            application.getString(R.string.follow)
                     }
                 }
 
                 is BaseResult.Error -> {
                     Log.e("Database Error Message:", "${result.message}")
                     _saveButtonNameMutableLiveData.value =
-                        application.getString(R.string.follow_election)
+                        application.getString(R.string.follow)
                 }
             }
         }

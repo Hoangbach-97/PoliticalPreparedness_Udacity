@@ -1,29 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="default_padding">8dp</dimen>
-
-    <dimen name="small_padding">4dp</dimen>
-    <dimen name="medium_padding">16dp</dimen>
-    <dimen name="button_size">320dp</dimen>
-    <dimen name="icon_size">30dp</dimen>
-    <dimen name="default1_padding">12dp</dimen>
-    <dimen name="medium1_padding">24dp</dimen>
-    <dimen name="medium2_padding">30dp</dimen>
-    <dimen name="large_padding">150dp</dimen>
-
     <!--    Margin/padding/height/width-->
-    <dimen name="margin_4dp">4dp</dimen>
-    <dimen name="margin_12dp">12dp</dimen>
-    <dimen name="margin_16dp">16dp</dimen>
-    <dimen name="margin_22dp">22dp</dimen>
-    <dimen name="margin_26dp">26dp</dimen>
-    <dimen name="margin_30dp">30dp</dimen>
-    <dimen name="height_44dp">44dp</dimen>
+    <dimen name="size_4dp">4dp</dimen>
+    <dimen name="size_12dp">12dp</dimen>
+    <dimen name="size_16dp">16dp</dimen>
+    <dimen name="size_22dp">22dp</dimen>
+    <dimen name="size_26dp">26dp</dimen>
+    <dimen name="size_30dp">30dp</dimen>
+    <dimen name="size_44dp">44dp</dimen>
 
-    <dimen name="margin_120dp">120dp</dimen>
-    <dimen name="margin_150dp">150dp</dimen>
-    <dimen name="margin_200dp">200dp</dimen>
-    <dimen name="margin_300dp">300dp</dimen>
+    <dimen name="size_120dp">120dp</dimen>
+    <dimen name="size_150dp">150dp</dimen>
+    <dimen name="size_200dp">200dp</dimen>
+    <dimen name="size_300dp">300dp</dimen>
 
     <!--    Text size -->
     <dimen name="text_22sp">22sp</dimen>
