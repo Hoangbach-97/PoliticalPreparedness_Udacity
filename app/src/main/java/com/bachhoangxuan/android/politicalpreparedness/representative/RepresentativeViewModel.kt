@@ -34,7 +34,7 @@ class RepresentativeViewModel : ViewModel() {
         viewModelScope.launch {
             try {
                 val (offices, officials) =
-                    CivicsApi.retrofitService.fetchRepresentatives(address = address.toFormattedString())
+                    CivicsApi.retrofitService.fetchReps(address = address.toFormattedString())
                         .await()
                 _representatives.value =
                     offices.flatMap { office -> office.getRepresentatives(officials) }

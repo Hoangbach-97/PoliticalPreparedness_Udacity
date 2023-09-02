@@ -1,4 +1,4 @@
-package com.bachhoangxuan.android.politicalpreparedness.utilities
+package com.bachhoangxuan.android.politicalpreparedness.util
 
 import android.util.Log
 import androidx.annotation.MainThread

@@ -5,42 +5,42 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
-class ElectionRepositories(
+class ElectionRepo(
     private val dao: ElectionDao, private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) {
 
-    suspend fun insertElection(election: Election) {
+    suspend fun insert(election: Election) {
         withContext(ioDispatcher) {
-            dao.insertElection(election)
+            dao.insert(election)
         }
     }
 
-    suspend fun getElections(): BaseResult<List<Election>> = withContext(ioDispatcher) {
-        return@withContext try {
-            BaseResult.Success(dao.getElections())
-        } catch (ex: Exception) {
-            BaseResult.Error(ex.localizedMessage)
-        }
-    }
-
-    suspend fun getElectionItemById(id: String): BaseResult<Election> = withContext(ioDispatcher) {
+    suspend fun getById(id: String): BaseResult<Election> = withContext(ioDispatcher) {
         try {
-            val election = dao.getElectionItemById(id)
+            val election = dao.getById(id)
             return@withContext BaseResult.Success(election)
         } catch (e: Exception) {
             return@withContext BaseResult.Error(e.localizedMessage)
         }
     }
 
-    suspend fun deleteElectionItemById(id: String) {
-        withContext(ioDispatcher) {
-            dao.deleteElectionItemById(id)
+    suspend fun getAll(): BaseResult<List<Election>> = withContext(ioDispatcher) {
+        return@withContext try {
+            BaseResult.Success(dao.getAll())
+        } catch (ex: Exception) {
+            BaseResult.Error(ex.localizedMessage)
         }
     }
 
-    suspend fun clearElections() {
+    suspend fun deleteById(id: String) {
         withContext(ioDispatcher) {
-            dao.clearElections()
+            dao.deleteById(id)
+        }
+    }
+
+    suspend fun deleteAll() {
+        withContext(ioDispatcher) {
+            dao.deleteAll()
         }
     }
 }

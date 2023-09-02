@@ -4,7 +4,6 @@ import android.app.Application
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 
-//TODO: Create Factory to generate ElectionViewModel with provided election datasource
 class ElectionsViewModelFactory(
     private val application: Application
 ) : ViewModelProvider.Factory {
@@ -13,6 +12,6 @@ class ElectionsViewModelFactory(
         if (modelClass.isAssignableFrom(ElectionsViewModel::class.java)) {
             return ElectionsViewModel(application) as T
         }
-        throw IllegalArgumentException("Unknown ViewModel class")
+        throw IllegalArgumentException("Unknown ViewModel")
     }
 }

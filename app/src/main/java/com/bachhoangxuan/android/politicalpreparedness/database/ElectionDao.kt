@@ -9,23 +9,18 @@ import com.bachhoangxuan.android.politicalpreparedness.network.models.Election
 @Dao
 interface ElectionDao {
 
-    //TODO: Add insert query
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertElection(vararg election: Election)
+    suspend fun insert(vararg election: Election)
 
-    //TODO: Add select all election query
-    @Query("SELECT * FROM election_table ORDER BY electionDay DESC")
-    fun getElections(): List<Election>
+    @Query("select * from election_table where id = :id")
+    fun getById(id: String): Election
 
-    //TODO: Add select single election query
-    @Query("SELECT * FROM election_table WHERE id = :id")
-    fun getElectionItemById(id: String): Election
+    @Query("select * from election_table order by electionDay desc")
+    fun getAll(): List<Election>
 
-    //TODO: Add delete query
-    @Query("DELETE FROM election_table WHERE id = :id")
-    fun deleteElectionItemById(id: String)
+    @Query("delete from election_table where id = :id")
+    fun deleteById(id: String)
 
-    //TODO: Add clear query
-    @Query("DELETE FROM election_table")
-    suspend fun clearElections()
+    @Query("delete from election_table")
+    suspend fun deleteAll()
 }

@@ -14,6 +14,7 @@ import androidx.navigation.Navigation
 import com.bachhoangxuan.android.politicalpreparedness.R
 import com.bachhoangxuan.android.politicalpreparedness.databinding.FragmentVoterInfoBinding
 import com.bachhoangxuan.android.politicalpreparedness.network.models.Election
+import com.bachhoangxuan.android.politicalpreparedness.util.Constants
 import kotlinx.coroutines.launch
 
 @Suppress("UNUSED_EXPRESSION")
@@ -29,83 +30,77 @@ class VoterInfoFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
-        // TODO: Add ViewModel values and create ViewModel
-        var electionDatabase: Election? = null
+        var election: Election? = null
         var votingUrl = ""
         var ballotUrl = ""
-        val fragmentVoterInfoBinding: FragmentVoterInfoBinding = DataBindingUtil.inflate(
+        val binding: FragmentVoterInfoBinding = DataBindingUtil.inflate(
             inflater, R.layout.fragment_voter_info, container, false,
         )
 
-        // TODO: Add binding values
-        fragmentVoterInfoBinding.voterInfoViewModel = voterInfoViewModel
-        fragmentVoterInfoBinding.lifecycleOwner = this
+        binding.voterInfoViewModel = voterInfoViewModel
+        binding.lifecycleOwner = this
         val argDivision = VoterInfoFragmentArgs.fromBundle(requireArguments()).argDivision
         val argElectionId = VoterInfoFragmentArgs.fromBundle(requireArguments()).argElectionId
-        voterInfoViewModel.getElectionById(argElectionId)
-        voterInfoViewModel.getPopulateVoterInfo(argElectionId, argDivision.id)
+        voterInfoViewModel.getElection(argElectionId)
+        voterInfoViewModel.getVoterInfo(argElectionId, argDivision.id)
 
-        // TODO: Populate voter info -- hide views without provided data.
         voterInfoViewModel.electionLiveData.observe(viewLifecycleOwner) { electionData ->
-            electionDatabase = electionData
+            election = electionData
         }
 
         /**
         Hint: You will need to ensure proper data is provided from previous fragment.
          */
 
-        // TODO: Handle loading of URLs
-        voterInfoViewModel.voterInfoResponseLiveData.observe(viewLifecycleOwner) { voterInfo ->
+        voterInfoViewModel.voterInfoResponse.observe(viewLifecycleOwner) { voterInfo ->
             voterInfo.let {
                 if (!voterInfo.state.isNullOrEmpty()) {
                     votingUrl =
                         voterInfo.state.first().electionAdministrationBody.votingLocationFinderUrl
-                            ?: ""
+                            ?: Constants.EMPTY_STRING
                     ballotUrl =
-                        voterInfo.state.first().electionAdministrationBody.ballotInfoUrl ?: ""
+                        voterInfo.state.first().electionAdministrationBody.ballotInfoUrl
+                            ?: Constants.EMPTY_STRING
                 } else {
-                    fragmentVoterInfoBinding.addressGroup.visibility = View.GONE
+                    binding.addressGroup.visibility = View.GONE
                 }
 
             }
         }
 
-        // TODO: Handle save button UI state
-        fragmentVoterInfoBinding.stateLocations.setOnClickListener {
+        binding.stateLocations.setOnClickListener {
             if (votingUrl.isNotEmpty()) {
-                loadURLIntents(votingUrl)
+                loadUrl(votingUrl)
             } else {
                 null
             }
         }
-        fragmentVoterInfoBinding.stateBallot.setOnClickListener {
+        binding.stateBallot.setOnClickListener {
             if (ballotUrl.isNotEmpty()) {
-                loadURLIntents(ballotUrl)
+                loadUrl(ballotUrl)
             } else {
                 null
             }
         }
-        // TODO: cont'd Handle save button clicks
-        fragmentVoterInfoBinding.saveElectionButton.setOnClickListener {
-            if (electionDatabase != null) {
+        binding.saveElectionButton.setOnClickListener {
+            if (election != null) {
                 viewLifecycleOwner.lifecycleScope.launch {
-                    voterInfoViewModel.removeElectionById(argElectionId)
+                    voterInfoViewModel.deleteElection(argElectionId)
                     Navigation.findNavController(requireView()).popBackStack()
                 }
 
             } else {
                 viewLifecycleOwner.lifecycleScope.launch {
-                    voterInfoViewModel.saveElectionToDatabase()
+                    voterInfoViewModel.saveElection()
                     Navigation.findNavController(requireView()).popBackStack()
                 }
             }
         }
 
-        return fragmentVoterInfoBinding.root
+        return binding.root
     }
 
-    // TODO: Create method to load URL intents
-    private fun loadURLIntents(url: String) {
+    private fun loadUrl(url: String) {
         val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
         startActivity(intent)
     }

@@ -9,38 +9,37 @@ import androidx.lifecycle.viewModelScope
 import com.bachhoangxuan.android.politicalpreparedness.R
 import com.bachhoangxuan.android.politicalpreparedness.database.BaseResult
 import com.bachhoangxuan.android.politicalpreparedness.database.ElectionDatabase.Companion.getInstance
-import com.bachhoangxuan.android.politicalpreparedness.database.ElectionRepositories
+import com.bachhoangxuan.android.politicalpreparedness.database.ElectionRepo
 import com.bachhoangxuan.android.politicalpreparedness.network.CivicsApi
 import com.bachhoangxuan.android.politicalpreparedness.network.jsonadapter.ElectionAdapter
 import com.bachhoangxuan.android.politicalpreparedness.network.models.Election
 import com.bachhoangxuan.android.politicalpreparedness.network.models.VoterInfoResponse
-import com.bachhoangxuan.android.politicalpreparedness.utilities.BaseSingleLiveEvent
+import com.bachhoangxuan.android.politicalpreparedness.util.BaseSingleLiveEvent
+import com.bachhoangxuan.android.politicalpreparedness.util.Constants
 import kotlinx.coroutines.launch
 import retrofit2.await
 
 class VoterInfoViewModel(private val application: Application) : ViewModel() {
-    val showLoadingEvent: BaseSingleLiveEvent<Boolean> = BaseSingleLiveEvent()
+    val showLoading: BaseSingleLiveEvent<Boolean> = BaseSingleLiveEvent()
     private val electionDao = getInstance(application).electionDao
-    private val electionRepositories = ElectionRepositories(electionDao)
+    private val electionRepo = ElectionRepo(electionDao)
     var election: Election? = null
 
-    //TODO: Add live data to hold voter info
-    private val _voterInfoResponseMutableLiveData = MutableLiveData<VoterInfoResponse>()
-    val voterInfoResponseLiveData: LiveData<VoterInfoResponse> get() = _voterInfoResponseMutableLiveData
+    private val _voterInfoResponse = MutableLiveData<VoterInfoResponse>()
+    val voterInfoResponse: LiveData<VoterInfoResponse> get() = _voterInfoResponse
 
-    private val _saveButtonNameMutableLiveData = MutableLiveData<String>()
-    val saveButtonNameLiveData: LiveData<String> get() = _saveButtonNameMutableLiveData
+    private val _saveButtonName = MutableLiveData<String>()
+    val saveButtonName: LiveData<String> get() = _saveButtonName
 
-    private val _addressMutableLiveData = MutableLiveData<String>()
-    val addressLiveData: LiveData<String> get() = _addressMutableLiveData
+    private val _address = MutableLiveData<String>()
+    val address: LiveData<String> get() = _address
 
-    private val _electionMutableLiveData = MutableLiveData<Election?>()
-    val electionLiveData: LiveData<Election?> get() = _electionMutableLiveData
+    private val _electionLiveData = MutableLiveData<Election?>()
+    val electionLiveData: LiveData<Election?> get() = _electionLiveData
 
-    //TODO: Add var and methods to populate voter info
-    fun getPopulateVoterInfo(id: String, division: String) {
+    fun getVoterInfo(id: String, division: String) {
         val divisionAdapter = ElectionAdapter()
-        showLoadingEvent.value = true
+        showLoading.value = true
         viewModelScope.launch {
             try {
                 val result =
@@ -50,7 +49,8 @@ class VoterInfoViewModel(private val application: Application) : ViewModel() {
                         productionDataOnly = true,
                         returnAllAvailableData = true,
                     ).await()
-                showLoadingEvent.postValue(false)
+                showLoading.postValue(false)
+
                 election = Election(
                     id = result.election.id,
                     name = result.election.name,
@@ -58,36 +58,32 @@ class VoterInfoViewModel(private val application: Application) : ViewModel() {
                     ocdDivisionId = result.election.ocdDivisionId,
                     division = divisionAdapter.divisionFromJson(result.election.ocdDivisionId)
                 )
-                _voterInfoResponseMutableLiveData.value = result
+
+                _voterInfoResponse.value = result
                 if (result.state.isNullOrEmpty()) {
-                    _addressMutableLiveData.value = ""
+                    _address.value = Constants.EMPTY_STRING
                 } else {
-                    _addressMutableLiveData.value =
+                    _address.value =
                         result.state.first().electionAdministrationBody.correspondenceAddress?.line1
-                            ?: ""
+                            ?: Constants.EMPTY_STRING
                 }
-                Log.i("ELECTIONS SUCCESS DATA:", "${_voterInfoResponseMutableLiveData.value}")
             } catch (e: Exception) {
-                Log.e("ELECTIONS ERROR FAILURE MESSAGE:", "${e.message}")
+                Log.e("Election error", "${e.message}")
             }
         }
     }
 
-    //TODO: Add var and methods to support loading URLs
-
-    //TODO: Add var and methods to save and remove elections to local database
-    //TODO: cont'd -- Populate initial state of save button to reflect proper action based on election saved status
-    fun saveElectionToDatabase() {
+    fun saveElection() {
         viewModelScope.launch {
             if (election != null) {
-                electionRepositories.insertElection(election!!)
+                electionRepo.insert(election!!)
             }
         }
     }
 
-    fun removeElectionById(id: String) {
+    fun deleteElection(id: String) {
         viewModelScope.launch {
-            electionRepositories.deleteElectionItemById(id)
+            electionRepo.deleteById(id)
         }
     }
 
@@ -95,24 +91,24 @@ class VoterInfoViewModel(private val application: Application) : ViewModel() {
      * Hint: The saved state can be accomplished in multiple ways. It is directly related to how elections are saved/removed from the database.
      */
 
-    fun getElectionById(id: String) {
+    fun getElection(id: String) {
         viewModelScope.launch {
-            when (val result = electionRepositories.getElectionItemById(id)) {
+            when (val result = electionRepo.getById(id)) {
                 is BaseResult.Success<Election> -> {
                     val electionData = result.data as Election?
                     if (electionData != null) {
-                        _electionMutableLiveData.value = electionData
-                        _saveButtonNameMutableLiveData.value =
+                        _electionLiveData.value = electionData
+                        _saveButtonName.value =
                             application.getString(R.string.unfollow)
                     } else {
-                        _saveButtonNameMutableLiveData.value =
+                        _saveButtonName.value =
                             application.getString(R.string.follow)
                     }
                 }
 
                 is BaseResult.Error -> {
-                    Log.e("Database Error Message:", "${result.message}")
-                    _saveButtonNameMutableLiveData.value =
+                    Log.e("Database Error", "${result.message}")
+                    _saveButtonName.value =
                         application.getString(R.string.follow)
                 }
             }

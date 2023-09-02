@@ -34,7 +34,7 @@ private val retrofit = Retrofit.Builder()
 
 interface CivicsApiService {
     @GET("elections")
-    fun fetchElections(): Call<ElectionResponse>
+    fun fetchAllElections(): Call<ElectionResponse>
 
     @GET("voterinfo")
     fun fetchVoterInfo(
@@ -45,7 +45,7 @@ interface CivicsApiService {
     ): Call<VoterInfoResponse>
 
     @GET("representatives")
-    fun fetchRepresentatives(@Query("address") address: String): Call<RepresentativeResponse>
+    fun fetchReps(@Query("address") address: String): Call<RepresentativeResponse>
 }
 
 object CivicsApi {
