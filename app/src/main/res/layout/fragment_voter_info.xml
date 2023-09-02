@@ -96,7 +96,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/size_12dp"
-            android:text="@string/correspondence_address"
+            android:text="@string/address"
             android:textSize="@dimen/text_22sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"

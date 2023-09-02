@@ -91,7 +91,7 @@
                 android:layout_height="@dimen/size_44dp"
                 android:layout_marginStart="@dimen/size_16dp"
                 android:autofillHints=""
-                android:hint="@string/zip"
+                android:hint="@string/zip_hint"
                 android:inputType="number"
                 android:maxLength="5"
                 android:text="@={representativeViewModel.addressInput.zip}"

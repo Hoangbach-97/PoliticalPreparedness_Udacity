@@ -4,7 +4,6 @@ import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.view.View
 
-// Animate changing when the view visibility.
 fun View.animationFadeIn() {
     this.visibility = View.VISIBLE
     this.alpha = 0f
