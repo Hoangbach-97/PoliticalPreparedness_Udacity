@@ -42,7 +42,7 @@
                 android:autofillHints=""
                 android:hint="@string/address_1"
                 android:inputType="textPostalAddress"
-                android:text="@={representativeViewModel.addressInputLiveData.line1}"
+                android:text="@={representativeViewModel.addressInput.line1}"
                 android:textColorHint="@color/gray50"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/search_title" />
@@ -55,7 +55,7 @@
                 android:autofillHints=""
                 android:hint="@string/address_2"
                 android:inputType="textPostalAddress"
-                android:text="@={representativeViewModel.addressInputLiveData.line2}"
+                android:text="@={representativeViewModel.addressInput.line2}"
                 android:textColorHint="@color/gray50"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/address_line_1" />
@@ -68,7 +68,7 @@
                 android:autofillHints=""
                 android:hint="@string/city_hint"
                 android:inputType="textPostalAddress"
-                android:text="@={representativeViewModel.addressInputLiveData.city}"
+                android:text="@={representativeViewModel.addressInput.city}"
                 android:textColorHint="@color/gray50"
                 app:layout_constraintEnd_toStartOf="@id/state"
                 app:layout_constraintStart_toStartOf="parent"
@@ -76,7 +76,7 @@
 
             <Spinner
                 android:id="@+id/state"
-                stateValue="@{representativeViewModel.addressInputLiveData.state}"
+                stateValue="@{representativeViewModel.addressInput.state}"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:inputType="textPostalAddress"
@@ -94,7 +94,7 @@
                 android:hint="@string/zip"
                 android:inputType="number"
                 android:maxLength="5"
-                android:text="@={representativeViewModel.addressInputLiveData.zip}"
+                android:text="@={representativeViewModel.addressInput.zip}"
                 android:textColorHint="@color/gray50"
                 app:layout_constraintEnd_toEndOf="@id/city"
                 app:layout_constraintStart_toStartOf="parent"

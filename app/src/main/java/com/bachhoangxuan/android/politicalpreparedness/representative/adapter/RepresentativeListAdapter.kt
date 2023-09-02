@@ -33,17 +33,14 @@ class RepresentativeViewHolder(val binding: RepresentativeItemBinding) :
 
     fun bind(item: Representative) {
         binding.representative = item
-        binding.representativePhoto.setImageResource(R.drawable.ic_profile)
+        binding.repsPhoto.setImageResource(R.drawable.ic_profile)
 
-        //TODO: Show social links ** Hint: Use provided helper methods
         item.official.channels?.let { showSocialLinks(it) }
-        //TODO: Show www link ** Hint: Use provided helper methods
         item.official.urls?.let { showWWWLinks(it) }
 
         binding.executePendingBindings()
     }
 
-    //TODO: Add companion object to inflate ViewHolder (from)
     companion object {
         fun from(parent: ViewGroup): RepresentativeViewHolder {
             val layoutInflater = LayoutInflater.from(parent.context)
@@ -65,7 +62,7 @@ class RepresentativeViewHolder(val binding: RepresentativeItemBinding) :
     }
 
     private fun showWWWLinks(urls: List<String>) {
-        enableLink(binding.wwwIcon, urls.first())
+        enableLink(binding.webIcon, urls.first())
     }
 
     private fun getFacebookUrl(channels: List<Channel>): String? {
@@ -93,7 +90,6 @@ class RepresentativeViewHolder(val binding: RepresentativeItemBinding) :
 
 }
 
-//TODO: Create RepresentativeDiffCallback
 class RepresentativeDiffCallback : DiffUtil.ItemCallback<Representative>() {
     override fun areItemsTheSame(oldItem: Representative, newItem: Representative): Boolean =
         oldItem === newItem
@@ -102,5 +98,4 @@ class RepresentativeDiffCallback : DiffUtil.ItemCallback<Representative>() {
         oldItem.office.division.id == newItem.office.division.id
 }
 
-//TODO: Create RepresentativeListener
 class RepresentativeListener(val clickListener: (representative: Representative) -> Unit)

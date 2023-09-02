@@ -105,8 +105,8 @@ class RepresentativeFragment : Fragment() {
                 Log.e("savedInstanceState ERROR:", "${e.message}")
             }
         }
-        viewModel.addressInputLiveData.observe(viewLifecycleOwner) { addressUser = it }
-        viewModel.representativesLiveData.observe(viewLifecycleOwner) {
+        viewModel.addressInput.observe(viewLifecycleOwner) { addressUser = it }
+        viewModel.representatives.observe(viewLifecycleOwner) {
             it?.let { representativeAdapter.submitList(it) }
         }
 

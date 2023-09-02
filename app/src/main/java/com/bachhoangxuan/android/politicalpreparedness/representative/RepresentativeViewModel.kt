@@ -13,18 +13,16 @@ import retrofit2.await
 
 class RepresentativeViewModel : ViewModel() {
 
-    //TODO: Establish live data for representatives and address
-    private val _representativesMutableLiveData = MutableLiveData<List<Representative>>()
-    val representativesLiveData: LiveData<List<Representative>>
-        get() = _representativesMutableLiveData
+    private val _representatives = MutableLiveData<List<Representative>>()
+    val representatives: LiveData<List<Representative>>
+        get() = _representatives
 
-    private val _addressInputMutableLiveData = MutableLiveData(
+    private val _addressInput = MutableLiveData(
         Address(line1 = "", city = "", state = "", zip = "")
     )
-    val addressInputLiveData: LiveData<Address>
-        get() = _addressInputMutableLiveData
+    val addressInput: LiveData<Address>
+        get() = _addressInput
 
-    //TODO: Create function to fetch representatives from API from a provided address
     /**
      *  The following code will prove helpful in constructing a representative from the API. This code combines the two nodes of the RepresentativeResponse into a single official
      *  val (offices, officials) = getRepresentativesDeferred.await()
@@ -32,29 +30,26 @@ class RepresentativeViewModel : ViewModel() {
      *     Note: getRepresentatives in the above code represents the method used to fetch data from the API
      *     Note: _representatives in the above code represents the established mutable live data housing representatives
      */
-    //TODO: Create function get address from geo location
-    fun setState(state: String) {
-        _addressInputMutableLiveData.value?.state = state
-    }
-
-    //TODO: Create function to get address from individual fields
-    fun setAddress(address: Address) {
-        _addressInputMutableLiveData.value = address
-    }
-
     fun fetchRepresentatives(address: Address) {
         viewModelScope.launch {
             try {
                 val (offices, officials) =
                     CivicsApi.retrofitService.fetchRepresentatives(address = address.toFormattedString())
                         .await()
-                Log.e("ELECTIONS SUCCESS fetchRepresentatives:", "$offices")
-                _representativesMutableLiveData.value =
+                _representatives.value =
                     offices.flatMap { office -> office.getRepresentatives(officials) }
             } catch (e: Exception) {
-                Log.e("ELECTIONS ERROR fetchRepresentatives:", "Failure: ${e.message}")
+                Log.e("Fetch reps error", "${e.message}")
             }
         }
+    }
+
+    fun setState(state: String) {
+        _addressInput.value?.state = state
+    }
+
+    fun setAddress(address: Address) {
+        _addressInput.value = address
     }
 
 }
