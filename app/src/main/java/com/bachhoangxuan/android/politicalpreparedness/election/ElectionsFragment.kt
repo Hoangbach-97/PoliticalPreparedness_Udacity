@@ -40,8 +40,8 @@ class ElectionsFragment : Fragment() {
         val savedAdapter = ElectionListAdapter(ElectionListener { election ->
             viewModel.onClickUpcomingElectionVoterInfo(election)
         })
-        binding.upcomingElectionRecycler.adapter = upcomingAdapter
-        binding.saveElectionRecycler.adapter = savedAdapter
+        binding.upcomingRecycler.adapter = upcomingAdapter
+        binding.savedRecycler.adapter = savedAdapter
         viewModel.savedElectionList.observe(viewLifecycleOwner) {
             it?.let {
                 savedAdapter.submitList(it)

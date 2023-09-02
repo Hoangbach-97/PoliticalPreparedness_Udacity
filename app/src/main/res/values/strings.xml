@@ -2,21 +2,17 @@
 <resources>
     <string name="app_name">Political Preparedness</string>
 
-    <!-- TODO: Add necessary string values -->
-    // Election Item
     <string name="item_election_name">Election name</string>
     <string name="item_election_day">Election day</string>
     <string name="upcoming_elections">Upcoming Elections</string>
     <string name="saved_elections">Saved Elections</string>
 
-    // Representative Item
     <string name="representative_name">Representative Name</string>
     <string name="representative_party">Representative Party</string>
     <string name="facebook_link">Representative Facebook link</string>
     <string name="twitter_link">Representative Twitter link</string>
     <string name="web_link">Representative Website link</string>
 
-    // Voter Information
     <string name="voter_information_day">12 November 2055</string>
     <string name="election_information">Election Information</string>
     <string name="voting_locations">Voting Locations</string>
@@ -24,11 +20,9 @@
     <string name="state_information">State Information</string>
     <string name="voter_address">Voter Address</string>
 
-    // Representative
     <string name="facebook_link_invalid">Facebook link is not exist!</string>
     <string name="twitter_link_invalid">Twitter link is not exist!</string>
 
-    // Toolbar
     <string name="voter_info_title">Voter Information</string>
 
     <string name="launching_logo_description">Launching logo for Political Preparedness</string>
@@ -59,21 +53,21 @@
 
     <string name="image_launch_description">Image Background Launch</string>
     <string name="upcoming_button">UPCOMING ELECTIONS</string>
-    <string name="find_button">FIND MY REPRESENTATIVES</string>
-    <string name="upcoming_title">Upcoming Elections</string>
+    <string name="find_reps_button">FIND REPRESENTATIVES</string>
+    <string name="title">Upcoming Elections</string>
     <string name="saved_election">Saved Elections</string>
-    <string name="election_info">Election Information</string>
-    <string name="voting_location">Voting Locations</string>
+    <string name="election_info">Information</string>
+    <string name="location">Location</string>
     <string name="ballot_info">Ballot Information</string>
     <string name="correspondence_address">Correspondence Address</string>
     <string name="save_button">Save Button</string>
-    <string name="representative_search">Representative Search</string>
-    <string name="line1_hint">Address Line 1</string>
-    <string name="line2_hint">Address Line 2</string>
+    <string name="reps_search">Representative Search</string>
+    <string name="address_1">Address 1</string>
+    <string name="address_2">Address 2</string>
     <string name="city_hint">City</string>
     <string name="location_button">USE MY LOCATION</string>
     <string name="my_representative">My Representatives</string>
     <string name="icwww_link">ICWWW LINK</string>
-    <string name="enable_location_please">Enable Location, Please!</string>
+    <string name="enable_location">Please, enable your location!</string>
 
 </resources>

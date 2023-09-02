@@ -136,7 +136,7 @@ class RepresentativeFragment : Fragment() {
             } else {
                 Toast.makeText(
                     requireContext(),
-                    getString(R.string.enable_location_please),
+                    getString(R.string.enable_location),
                     Toast.LENGTH_SHORT,
                 ).show()
             }
@@ -180,7 +180,7 @@ class RepresentativeFragment : Fragment() {
         } else {
             Toast.makeText(
                 requireContext(),
-                getString(R.string.enable_location_please),
+                getString(R.string.enable_location),
                 Toast.LENGTH_SHORT,
             ).show()
         }

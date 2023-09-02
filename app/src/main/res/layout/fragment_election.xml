@@ -14,72 +14,70 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginHorizontal="@dimen/default_padding"
-        android:layout_marginTop="@dimen/default1_padding"
+        android:layout_marginTop="@dimen/margin_12dp"
         android:gravity="start"
         tools:context="com.bachhoangxuan.android.politicalpreparedness.MainActivity">
 
 
         <TextView
-            android:id="@+id/upcomingElectionTitle"
+            android:id="@+id/upcomingTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/medium_padding"
-            android:text="@string/upcoming_title"
-            android:textSize="24sp"
+            android:layout_marginBottom="@dimen/margin_16dp"
+            android:text="@string/title"
+            android:textColor="@color/colorSubtitle"
+            android:textSize="@dimen/text_22sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/upcomingElectionRecycler"
+            android:id="@+id/upcomingRecycler"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_marginTop="@dimen/medium_padding"
+            android:layout_marginTop="@dimen/margin_16dp"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHeight_percent="0.4"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/upcomingElectionTitle" />
+            app:layout_constraintTop_toBottomOf="@+id/upcomingTitle" />
 
         <ProgressBar
-            android:id="@+id/statusLoadingWheel"
+            android:id="@+id/loadingStatus"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:fadeVisible="@{electionViewModel.showEventLoading.booleanValue()}"
             android:indeterminate="true"
             android:visibility="gone"
-            app:layout_constraintBottom_toTopOf="@+id/saveElectionTitle"
-            app:layout_constraintHeight_percent="0.4"
+            app:layout_constraintBottom_toTopOf="@+id/savedTitle"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
 
         <TextView
-            android:id="@+id/saveElectionTitle"
+            android:id="@+id/savedTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:text="@string/saved_election"
-            android:textSize="24sp"
+            android:textColor="@color/colorSubtitle"
+            android:textSize="@dimen/text_22sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/upcomingElectionRecycler" />
+            app:layout_constraintTop_toBottomOf="@+id/upcomingRecycler" />
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/saveElectionRecycler"
+            android:id="@+id/savedRecycler"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_marginTop="@dimen/medium_padding"
+            android:layout_marginTop="@dimen/margin_16dp"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHeight_percent="0.4"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/saveElectionTitle" />
+            app:layout_constraintTop_toBottomOf="@+id/savedTitle" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

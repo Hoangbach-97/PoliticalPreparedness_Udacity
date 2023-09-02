@@ -9,43 +9,43 @@
         android:gravity="center_horizontal"
         tools:context="com.bachhoangxuan.android.politicalpreparedness.MainActivity">
 
-        <!-- TODO: Add image for home screen logo. -->
         <ImageView
-            android:id="@+id/imageHomeScreenLogo"
+            android:id="@+id/homeLogo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/large_padding"
-            android:contentDescription="@string/image_launch_description"
+            android:layout_marginTop="@dimen/margin_120dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/ballot_logo" />
 
-        <!-- TODO: Add Button to navigate to upcoming elections. -->
         <Button
             android:id="@+id/upcomingElectionsButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/medium_padding"
-            android:layout_marginBottom="@dimen/medium_padding"
-            android:background="@color/colorPrimaryDark"
+            android:layout_marginHorizontal="@dimen/margin_22dp"
+            android:layout_marginBottom="@dimen/margin_22dp"
+            android:background="@color/colorAccent"
+            android:clickable="true"
             android:text="@string/upcoming_button"
-            android:textColor="@color/white"
-            app:layout_constraintBottom_toTopOf="@+id/findNavigateButton"
-            app:layout_constraintEnd_toEndOf="@+id/imageHomeScreenLogo"
-            app:layout_constraintStart_toStartOf="@+id/imageHomeScreenLogo" />
+            android:textColor="@color/colorPrimary"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@+id/findRepsButton"
+            app:layout_constraintEnd_toEndOf="@+id/homeLogo"
+            app:layout_constraintStart_toStartOf="@+id/homeLogo" />
 
-        <!-- TODO: Add Button to navigate to representatives. -->
 
         <Button
-            android:id="@+id/findNavigateButton"
+            android:id="@+id/findRepsButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/medium_padding"
-            android:layout_marginBottom="@dimen/medium_padding"
-            android:background="@color/colorPrimaryDark"
-            android:text="@string/find_button"
-            android:textColor="@color/white"
+            android:layout_marginHorizontal="@dimen/margin_22dp"
+            android:layout_marginBottom="@dimen/margin_22dp"
+            android:background="@color/colorAccent"
+            android:clickable="true"
+            android:text="@string/find_reps_button"
+            android:textColor="@color/colorPrimary"
+            android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@+id/upcomingElectionsButton"
             app:layout_constraintStart_toStartOf="@+id/upcomingElectionsButton" />
