@@ -6,7 +6,6 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.location.Geocoder
 import android.location.Location
-import android.location.LocationManager
 import android.os.Bundle
 import android.os.Parcelable
 import android.util.Log
@@ -15,7 +14,7 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
-import androidx.core.content.ContextCompat
+import androidx.core.app.ActivityCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -24,6 +23,9 @@ import com.bachhoangxuan.android.politicalpreparedness.databinding.FragmentRepre
 import com.bachhoangxuan.android.politicalpreparedness.network.models.Address
 import com.bachhoangxuan.android.politicalpreparedness.representative.adapter.RepresentativeListAdapter
 import com.bachhoangxuan.android.politicalpreparedness.util.Constants
+import com.google.android.gms.location.LocationServices
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.OnMapReadyCallback
 import java.util.Locale
 
 @Suppress("DEPRECATION")
@@ -44,6 +46,7 @@ class RepresentativeFragment : Fragment() {
     private var addressUser: Address? = null
     private lateinit var binding: FragmentRepresentativeBinding
     private var recyclerViewState: Parcelable? = null
+    private lateinit var map: GoogleMap
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -107,16 +110,9 @@ class RepresentativeFragment : Fragment() {
 
         binding.buttonLocation.setOnClickListener {
             it.hideKeyboard()
-
-            if (isPermissionGranted()) {
-                getLocation()
-            } else {
-                requestPermissions(
-                    arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-                    REQUEST_LOCATION_PERMISSION,
-                )
-            }
+            enableLocationTracking()
         }
+
         binding.buttonSearch.setOnClickListener {
             if (addressUser != null) {
                 viewModel.fetchRepresentatives(addressUser!!)
@@ -126,14 +122,15 @@ class RepresentativeFragment : Fragment() {
 
     }
 
-    @Deprecated("Deprecated in Java")
     override fun onRequestPermissionsResult(
-        requestCode: Int, permissions: Array<out String>, grantResults: IntArray
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == REQUEST_LOCATION_PERMISSION) {
             if (grantResults.isNotEmpty() && (grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
-                getLocation()
+                enableLocationTracking()
             } else {
                 Toast.makeText(
                     requireContext(),
@@ -144,32 +141,45 @@ class RepresentativeFragment : Fragment() {
         }
     }
 
+    private fun isPermissionLocationGranted(): Boolean =
+        isPermissionGranted(Manifest.permission.ACCESS_FINE_LOCATION) && isPermissionGranted(
+            Manifest.permission.ACCESS_COARSE_LOCATION
+        )
 
-    private fun isPermissionGranted(): Boolean {
-        val locationPermission = Manifest.permission.ACCESS_FINE_LOCATION
-        return ContextCompat.checkSelfPermission(
-            requireContext(), locationPermission
+    private fun isPermissionGranted(permission: String): Boolean =
+        ActivityCompat.checkSelfPermission(
+            requireContext(), permission
         ) == PackageManager.PERMISSION_GRANTED
-    }
 
     @SuppressLint("MissingPermission")
     private fun getLocation() {
-        val locationManager =
-            requireActivity().getSystemService(Context.LOCATION_SERVICE) as LocationManager
 
-        val lastKnownLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)
-
-        if (lastKnownLocation != null) {
-            geoCodeLocation(lastKnownLocation).let { address ->
-                viewModel.setAddress(address)
-                viewModel.fetchRepresentatives(address)
+        if (isPermissionLocationGranted()) {
+            val fusedLocationProviderClient =
+                LocationServices.getFusedLocationProviderClient(requireActivity())
+            if (ActivityCompat.checkSelfPermission(
+                    requireContext(), Manifest.permission.ACCESS_FINE_LOCATION
+                ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                    requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                return
+            }
+            fusedLocationProviderClient.lastLocation.addOnSuccessListener { location ->
+                if (location != null) {
+                    geoCodeLocation(location).let { address ->
+                        viewModel.setAddress(address)
+                        viewModel.fetchRepresentatives(address)
+                    }
+                }
             }
         } else {
-            Toast.makeText(
-                requireContext(),
-                getString(R.string.enable_location),
-                Toast.LENGTH_SHORT,
-            ).show()
+            requestPermissions(
+                arrayOf(
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.ACCESS_COARSE_LOCATION
+                ), REQUEST_LOCATION_PERMISSION
+            )
         }
     }
 
@@ -185,6 +195,27 @@ class RepresentativeFragment : Fragment() {
                 zip = address1.postalCode ?: Constants.EMPTY_STRING
             )
         }!!.first()
+    }
+
+    private fun enableLocationTracking() {
+        if (isPermissionLocationGranted()) {
+            if (ActivityCompat.checkSelfPermission(
+                    requireContext(), Manifest.permission.ACCESS_FINE_LOCATION
+                ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                    requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                return
+            }
+            getLocation()
+        } else {
+            requestPermissions(
+                arrayOf(
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.ACCESS_COARSE_LOCATION
+                ), REQUEST_LOCATION_PERMISSION
+            )
+        }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

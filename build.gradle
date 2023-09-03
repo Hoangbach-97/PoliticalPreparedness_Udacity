@@ -17,6 +17,8 @@ buildscript {
         version_play_services_location = "21.0.1"
         version_room = "2.5.1"
         version_koin = "3.4.0"
+        playServicesLocationVersion = '21.0.1'
+        playServicesMapsVersion = '18.1.0'
     }
 
     repositories {

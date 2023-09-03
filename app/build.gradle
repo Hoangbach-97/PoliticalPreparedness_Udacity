@@ -80,4 +80,7 @@ dependencies {
 
     // Koin
     implementation "io.insert-koin:koin-android:$version_koin"
+
+    implementation "com.google.android.gms:play-services-location:$playServicesLocationVersion"
+    implementation "com.google.android.gms:play-services-maps:$playServicesMapsVersion"
 }

@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.bachhoangxuan.android.politicalpreparedness.network.CivicsApi
 import com.bachhoangxuan.android.politicalpreparedness.network.models.Address
 import com.bachhoangxuan.android.politicalpreparedness.representative.model.Representative
+import com.bachhoangxuan.android.politicalpreparedness.util.Constants
 import kotlinx.coroutines.launch
 import retrofit2.await
 
@@ -18,7 +19,12 @@ class RepresentativeViewModel : ViewModel() {
         get() = _representatives
 
     private val _addressInput = MutableLiveData(
-        Address(line1 = "", city = "", state = "", zip = "")
+        Address(
+            line1 = Constants.EMPTY_STRING,
+            city = Constants.EMPTY_STRING,
+            state = Constants.EMPTY_STRING,
+            zip = Constants.EMPTY_STRING
+        )
     )
     val addressInput: LiveData<Address>
         get() = _addressInput
