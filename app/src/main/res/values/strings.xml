@@ -23,6 +23,7 @@
 
     <string name="enable_location">Please, enable your location</string>
     <string name="link_invalid">Link is invalid</string>
+    <string name="not_exist_add">Not exist add</string>
 
 
 </resources>

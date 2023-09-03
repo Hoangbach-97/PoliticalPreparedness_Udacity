@@ -185,15 +185,24 @@ class RepresentativeFragment : Fragment() {
     private fun geoCodeLocation(location: Location): Address {
         val geocoder = Geocoder(requireContext(), Locale.getDefault())
         val address = geocoder.getFromLocation(location.latitude, location.longitude, 1)
-        return address?.map { address1 ->
-            Address(
-                line1 = address1.thoroughfare ?: Constants.EMPTY_STRING,
-                line2 = address1.subThoroughfare ?: Constants.EMPTY_STRING,
-                city = address1.locality ?: Constants.EMPTY_STRING,
-                state = address1.adminArea ?: Constants.EMPTY_STRING,
-                zip = address1.postalCode ?: Constants.EMPTY_STRING
-            )
-        }!!.first()
+        if (address != null) {
+            return address.map { add ->
+                Address(
+                    line1 = add.thoroughfare ?: Constants.EMPTY_STRING,
+                    line2 = add.subThoroughfare ?: Constants.EMPTY_STRING,
+                    city = add.locality ?: Constants.EMPTY_STRING,
+                    state = add.adminArea ?: Constants.EMPTY_STRING,
+                    zip = add.postalCode ?: Constants.EMPTY_STRING
+                )
+            }.first()
+        } else {
+            Toast.makeText(
+                requireContext(),
+                getString(R.string.not_exist_add),
+                Toast.LENGTH_SHORT,
+            ).show()
+            return Address()
+        }
     }
 
     private fun enableLocationTracking() {
