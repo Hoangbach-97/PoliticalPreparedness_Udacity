@@ -102,9 +102,6 @@ class RepresentativeFragment : Fragment() {
                 Log.e("savedInstanceState ERROR:", "${e.message}")
             }
         }
-        //TODO: I can't fix this issue and I wonder why  all users' input can saves if we kill the app(It only save if the app still running in the background)??
-        // And I think because of ViewModel's feature so It automatically saves all states
-        // Please give me some  example or reference that I can use
 
         viewModel.addressInput.observe(viewLifecycleOwner) { addressUser = it }
         viewModel.representatives.observe(viewLifecycleOwner) {
@@ -243,9 +240,6 @@ class RepresentativeFragment : Fragment() {
             }
 
         }
-        //TODO: I can't fix this issue and I wonder why  all users' input can saves if we kill the app(It only save if the app still running in the background)??
-        // And I think because of ViewModel's feature so It automatically saves all states
-        // Give me more example, please!
         val currentState = binding.representativeMotionLayout.currentState
         with(outState) {
             putInt(motionLayoutStateKey, currentState)
