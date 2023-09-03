@@ -18,7 +18,7 @@ class RepresentativeViewModel : ViewModel() {
     val representatives: LiveData<List<Representative>>
         get() = _representatives
 
-    private val _addressInput = MutableLiveData(
+    var _addressInput = MutableLiveData(
         Address(
             line1 = Constants.EMPTY_STRING,
             city = Constants.EMPTY_STRING,

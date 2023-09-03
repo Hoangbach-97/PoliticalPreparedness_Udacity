@@ -22,9 +22,9 @@ import com.bachhoangxuan.android.politicalpreparedness.R
 import com.bachhoangxuan.android.politicalpreparedness.databinding.FragmentRepresentativeBinding
 import com.bachhoangxuan.android.politicalpreparedness.network.models.Address
 import com.bachhoangxuan.android.politicalpreparedness.representative.adapter.RepresentativeListAdapter
+import com.bachhoangxuan.android.politicalpreparedness.representative.model.Representative
 import com.bachhoangxuan.android.politicalpreparedness.util.Constants
 import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.OnMapReadyCallback
 import java.util.Locale
 
 class RepresentativeFragment : Fragment() {
@@ -33,12 +33,8 @@ class RepresentativeFragment : Fragment() {
         private const val REQUEST_LOCATION_PERMISSION = 1
         private const val motionLayoutStateKey = "motionLayoutState"
         private const val recyclerViewStateKey = "recyclerViewState"
-        private const val line1Key = "line1"
-        private const val line2Key = "line2"
-        private const val cityKey = "city"
-        private const val stateKey = "state"
-        private const val zipKey = "zip"
         private const val repsKey = "reps"
+        private const val address = "address"
     }
 
     private val viewModel: RepresentativeViewModel by activityViewModels()
@@ -46,6 +42,7 @@ class RepresentativeFragment : Fragment() {
     private lateinit var binding: FragmentRepresentativeBinding
     private var recyclerViewState: Parcelable? = null
     private lateinit var map: GoogleMap
+    private var repsList: List<Representative>? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -82,26 +79,23 @@ class RepresentativeFragment : Fragment() {
 
                 override fun onNothingSelected(parent: AdapterView<*>?) = Unit
             }
-        savedInstanceState?.let {
-            try {
-                addressUser = Address(
-                    line1 = it.getString(line1Key) ?: Constants.EMPTY_STRING,
-                    line2 = it.getString(line2Key) ?: Constants.EMPTY_STRING,
-                    city = it.getString(cityKey) ?: Constants.EMPTY_STRING,
-                    state = it.getString(stateKey) ?: Constants.EMPTY_STRING,
-                    zip = it.getString(zipKey) ?: Constants.EMPTY_STRING,
+        if (savedInstanceState != null) {
+            Log.d("test_kill_process", "savedInstanceState: true")
+            addressUser = savedInstanceState.getParcelable(address)
+
+            viewModel._addressInput.value = addressUser
+
+            val motionLayoutState = savedInstanceState.getInt(motionLayoutStateKey, -1)
+            if (motionLayoutState != -1) {
+                binding.representativeMotionLayout.transitionToState(
+                    motionLayoutState
                 )
-                val motionLayoutState = it.getInt(motionLayoutStateKey, -1)
-                if (motionLayoutState != -1) {
-                    binding.representativeMotionLayout.transitionToState(
-                        motionLayoutState
-                    )
-                }
-                recyclerViewState = it.getParcelable(recyclerViewStateKey)
-            } catch (e: Exception) {
-                Log.e("savedInstanceState ERROR:", "${e.message}")
             }
+            recyclerViewState = savedInstanceState.getParcelable(recyclerViewStateKey)
+            viewModel.fetchRepresentatives(addressUser!!)
         }
+
+
 
         viewModel.addressInput.observe(viewLifecycleOwner) { addressUser = it }
         viewModel.representatives.observe(viewLifecycleOwner) {
@@ -230,24 +224,12 @@ class RepresentativeFragment : Fragment() {
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        addressUser?.let {
-            with(outState) {
-                putString(line1Key, it.line1)
-                putString(line2Key, it.line2)
-                putString(cityKey, it.city)
-                putString(stateKey, it.state)
-                putString(zipKey, it.zip)
-            }
-
-        }
-        val currentState = binding.representativeMotionLayout.currentState
-        with(outState) {
-            putInt(motionLayoutStateKey, currentState)
-            putParcelable(
-                recyclerViewStateKey,
-                binding.representativeRecycler.layoutManager?.onSaveInstanceState(),
-            )
-        }
+        outState.putParcelable(address, addressUser)
+        outState.putInt(motionLayoutStateKey, binding.representativeMotionLayout.currentState)
+        outState.putParcelable(
+            recyclerViewStateKey,
+            binding.representativeRecycler.layoutManager?.onSaveInstanceState()
+        )
     }
 
     override fun onResume() {
