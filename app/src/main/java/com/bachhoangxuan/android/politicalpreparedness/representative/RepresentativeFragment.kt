@@ -1,11 +1,11 @@
 package com.bachhoangxuan.android.politicalpreparedness.representative
 
 import android.Manifest
-import android.annotation.SuppressLint
 import android.content.Context
 import android.content.pm.PackageManager
 import android.location.Geocoder
 import android.location.Location
+import android.location.LocationManager
 import android.os.Bundle
 import android.os.Parcelable
 import android.util.Log
@@ -23,12 +23,10 @@ import com.bachhoangxuan.android.politicalpreparedness.databinding.FragmentRepre
 import com.bachhoangxuan.android.politicalpreparedness.network.models.Address
 import com.bachhoangxuan.android.politicalpreparedness.representative.adapter.RepresentativeListAdapter
 import com.bachhoangxuan.android.politicalpreparedness.util.Constants
-import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import java.util.Locale
 
-@Suppress("DEPRECATION")
 class RepresentativeFragment : Fragment() {
 
     companion object {
@@ -151,12 +149,9 @@ class RepresentativeFragment : Fragment() {
             requireContext(), permission
         ) == PackageManager.PERMISSION_GRANTED
 
-    @SuppressLint("MissingPermission")
     private fun getLocation() {
 
         if (isPermissionLocationGranted()) {
-            val fusedLocationProviderClient =
-                LocationServices.getFusedLocationProviderClient(requireActivity())
             if (ActivityCompat.checkSelfPermission(
                     requireContext(), Manifest.permission.ACCESS_FINE_LOCATION
                 ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
@@ -165,12 +160,16 @@ class RepresentativeFragment : Fragment() {
             ) {
                 return
             }
-            fusedLocationProviderClient.lastLocation.addOnSuccessListener { location ->
-                if (location != null) {
-                    geoCodeLocation(location).let { address ->
-                        viewModel.setAddress(address)
-                        viewModel.fetchRepresentatives(address)
-                    }
+            val locationManager =
+                requireActivity().getSystemService(Context.LOCATION_SERVICE) as LocationManager
+
+            val lastKnownLocation =
+                locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)
+
+            if (lastKnownLocation != null) {
+                geoCodeLocation(lastKnownLocation).let { address ->
+                    viewModel.setAddress(address)
+                    viewModel.fetchRepresentatives(address)
                 }
             }
         } else {
