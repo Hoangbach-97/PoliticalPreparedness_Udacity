@@ -1,8 +1,10 @@
 package com.bachhoangxuan.android.politicalpreparedness.representative
 
 import android.util.Log
+import androidx.core.os.bundleOf
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.bachhoangxuan.android.politicalpreparedness.network.CivicsApi
@@ -14,7 +16,7 @@ import retrofit2.await
 
 class RepresentativeViewModel : ViewModel() {
 
-    private val _representatives = MutableLiveData<List<Representative>>()
+    var _representatives = MutableLiveData<List<Representative>>()
     val representatives: LiveData<List<Representative>>
         get() = _representatives
 
@@ -29,6 +31,8 @@ class RepresentativeViewModel : ViewModel() {
     val addressInput: LiveData<Address>
         get() = _addressInput
 
+//    private val savedStateHandle = savedStateHandle
+
     /**
      *  The following code will prove helpful in constructing a representative from the API. This code combines the two nodes of the RepresentativeResponse into a single official
      *  val (offices, officials) = getRepresentativesDeferred.await()
@@ -36,7 +40,7 @@ class RepresentativeViewModel : ViewModel() {
      *     Note: getRepresentatives in the above code represents the method used to fetch data from the API
      *     Note: _representatives in the above code represents the established mutable live data housing representatives
      */
-    fun fetchRepresentatives(address: Address) {
+    fun fetchRepresentatives(address: Address){
         viewModelScope.launch {
             try {
                 val (offices, officials) =

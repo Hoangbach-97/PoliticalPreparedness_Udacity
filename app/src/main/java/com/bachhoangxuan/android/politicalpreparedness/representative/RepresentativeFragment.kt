@@ -25,6 +25,7 @@ import com.bachhoangxuan.android.politicalpreparedness.representative.adapter.Re
 import com.bachhoangxuan.android.politicalpreparedness.representative.model.Representative
 import com.bachhoangxuan.android.politicalpreparedness.util.Constants
 import com.google.android.gms.maps.GoogleMap
+import java.util.ArrayList
 import java.util.Locale
 
 class RepresentativeFragment : Fragment() {
@@ -82,8 +83,11 @@ class RepresentativeFragment : Fragment() {
         if (savedInstanceState != null) {
             Log.d("test_kill_process", "savedInstanceState: true")
             addressUser = savedInstanceState.getParcelable(address)
+            repsList = savedInstanceState.getParcelableArrayList(repsKey)
 
+            Log.d("test_kill_process", "savedInstanceState: repsList: ${repsList?.size}")
             viewModel._addressInput.value = addressUser
+            viewModel._representatives.value = repsList
 
             val motionLayoutState = savedInstanceState.getInt(motionLayoutStateKey, -1)
             if (motionLayoutState != -1) {
@@ -92,7 +96,6 @@ class RepresentativeFragment : Fragment() {
                 )
             }
             recyclerViewState = savedInstanceState.getParcelable(recyclerViewStateKey)
-            viewModel.fetchRepresentatives(addressUser!!)
         }
 
 
@@ -230,6 +233,7 @@ class RepresentativeFragment : Fragment() {
             recyclerViewStateKey,
             binding.representativeRecycler.layoutManager?.onSaveInstanceState()
         )
+        outState.putParcelableArrayList(repsKey, viewModel.representatives.value as ArrayList<out Parcelable> )
     }
 
     override fun onResume() {
